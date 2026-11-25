@@ -1,0 +1,22 @@
+# /etc/nginx/sites-available/pickups
+server {
+    listen 80;
+    server_name pickups.example.com;   # <- ваш домен или IP
+
+    root /var/www/pickups;
+    index index.html;
+
+    # SPA: все маршруты отдают index.html
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Кэширование собранных ассетов (имена содержат hash)
+    location /assets/ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    gzip on;
+    gzip_types text/css application/javascript image/svg+xml;
+}
